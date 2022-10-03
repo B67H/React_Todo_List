@@ -1,23 +1,34 @@
-import TodoItem from '../ListItem/TodoItem'
-import styles from './TodoList.module.css'
+import { TodoType } from "../App";
+import TodoItem from "../ListItem/TodoItem";
+import styles from "./TodoList.module.css";
 
-const TodoList = () => {
-  const arr = ['Reece' , 'Mason', 'Thiago', 'Conor', 'Ruben']
+interface TodoListProps {
+  todos: TodoType[];
+  onToggleClick : (id : number) => void
+  onRemoveClick : (id : number) => void
+}
+
+const TodoList = (props: TodoListProps) => {
+  // const arr = ["Reece", "Mason", "Thiago", "Conor", "Ruben"];
 
   return (
     <section>
       <ol className={styles.olContainer}>
-        {arr.map((str, idx) => {
-          return <TodoItem key={`${str}_${idx}`} text={str}/>
+        {props.todos.map((todo) => {
+          return (
+            <TodoItem
+              id={todo.id}
+              key={todo.id}
+              text={todo.text}
+              isChecked={todo.isChecked}
+              onToggleClick={props.onToggleClick}
+              onRemoveClick={props.onRemoveClick}
+            />
+          );
         })}
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
       </ol>
     </section>
-  )
-}
+  );
+};
 
-export default TodoList
+export default TodoList;

@@ -12,6 +12,7 @@
   color: #c0c0c0;
   background-color: white;
   align-items: center;
+  cursor: pointer;
 }
 
 .checkAllIcon{
