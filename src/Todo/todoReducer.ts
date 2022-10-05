@@ -1,3 +1,5 @@
+import { saveTodos } from "./todoStorage";
+
 export type TodoType = {
   id: number;
   text: string;
@@ -27,42 +29,67 @@ export type TodoActionType =
 
 export const todoReducer = (state: TodoStateType, action: TodoActionType) => {
   switch (action.type) {
-    case "add":
-      return {
-        todos: state.todos.concat({
-          id: Date.now(),
-          text: action.payload.text,
-          isChecked: false,
-        }),
-      };
-    case "remove":
-      return {
-        todos: state.todos.filter((todo) => {
-          return todo.id !== action.payload.id;
-        }),
-      };
-    case "checked":
-      return {
-        todos: state.todos.map((todo) => {
-          if (todo.id === action.payload.id) {
-            return { ...todo, isChecked: !todo.isChecked };
-          }
-          return todo;
-        }),
-      };
+    case "add": {
+      const newTodos = state.todos.concat({
+        id: Date.now(),
+        text: action.payload.text,
+        isChecked: false,
+      });
 
-    case "allChecked":
+      saveTodos(newTodos);
+
       return {
-        todos: state.todos.map((todo) => {
-          return {
-            ...todo,
-            isChecked: !action.payload,
-          };
-        }),
+        todos: newTodos,
       };
-    case "allRemove":
+    }
+    case "remove": {
+      const newTodos = state.todos.filter((todo) => {
+        return todo.id !== action.payload.id;
+      });
+
+      saveTodos(newTodos);
+
       return {
-        todos: []
+        todos: newTodos,
       };
+    }
+    case "checked": {
+      const newTodos = state.todos.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return { ...todo, isChecked: !todo.isChecked };
+        }
+
+        return todo;
+      });
+
+      saveTodos(newTodos);
+
+      return {
+        todos: newTodos,
+      };
+    }
+
+    case "allChecked": {
+      const newTodos = state.todos.map((todo) => {
+        return {
+          ...todo,
+          isChecked: !action.payload,
+        };
+      });
+
+      saveTodos(newTodos);
+
+      return {
+        todos: newTodos,
+      };
+    }
+
+    case "allRemove": {
+      saveTodos([]);
+      
+      return {
+        todos: [],
+      };
+    }
   }
 };
